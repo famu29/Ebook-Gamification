@@ -1,0 +1,66 @@
+/*kns*/
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP');
+
+
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+.class2{
+	font-size:25px;
+	line-height:10px;
+}
+
+.MyPoint{
+	border-bottom: 2px solid ;
+}
+
+.tablehead{
+	border-bottom: 2px solid ;
+	width: 200px;
+	/*background-color: #e0ffff 背景色*/
+}
+
+.Point{
+	text-align: center;
+}
+
+.badgehead{
+	font-size:20px;
+}
+
+.setumei,.check{
+	width: 300px;
+ 	text-align: center;
+}
+
+.check{
+	font-size: 40px;
+}
+
+.badge1,.badge2 {
+    border-collapse: collapse;
+    border:1px solid #333;
+}
+
+.flex {
+   display: flex;
+}
+.today-ranking th,td{
+	width: 125px;
+ 	text-align: center;
+}
+
+caption{
+	font-size:25px;
+}
+
+table.today-ranking {
+      margin: auto;
+}
+
+table.total-ranking {
+      margin: auto;
+  }
+
