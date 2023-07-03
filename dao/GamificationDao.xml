@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.ac.tokushima_u.is.ll.dao.GamificationDao" >
+
+	<!-- kns  -->
+
+	<!-- ユーザIDからそのユーザのニックネームを取得する -->
+	<select id="getNickNameFromUserId" resultType="String">
+	    select nickname
+	    from t_users
+	    where id=#{userid}
+	</select>
+
+	<!--2020/10/09以降に作られたユーザリストを取得-->
+	<select id="loadUserList" resultType="String">
+		SELECT id
+		FROM t_users
+		WHERE create_time > #{startday}
+	</select>
+
+	<!--スタートダッシュバッジを獲得したユーザを取得-->
+	<select id="getStartDashUser" resultType="String">
+		select USERID
+		FROM learninglog.ebook_bookroll
+		where OPERATIONDATE>#{startdashday}
+		AND (CONTENTSID="epubid_1b34896c926c422e9e78cd1d714488a8" or CONTENTSID="epubid_50ce8e91e51f4201aee68961d7727efa" or CONTENTSID="epubid_2bf2c73776c74ba7bcec6d64fb58a9e5" or CONTENTSID="epubid_a4435f9b23744dc598cd55570a9da6c7" or CONTENTSID="epubid_a650a061b79242169dadbfbe7d6d6dd6")
+		ORDER BY OPERATIONDATE limit 1;
+	</select>
+
+	<!-- ユーザIDと日にちからそのユーザのebookpointを取得 -->
+	<select id="getMyDayEbookPoint" resultType="int">
+		SELECT COUNT(distinct OPERATIONDATE)
+		FROM learninglog.ebook_bookroll
+		WHERE (OPERATIONNAME like "%NEXT%" OR OPERATIONNAME like "%PREV%")
+		AND USERID=#{userid}
+		AND DATE_FORMAT(OPERATIONDATE, '%Y-%m-%d')=#{date}
+		AND (CONTENTSID="epubid_1b34896c926c422e9e78cd1d714488a8" or CONTENTSID="epubid_50ce8e91e51f4201aee68961d7727efa" or CONTENTSID="epubid_2bf2c73776c74ba7bcec6d64fb58a9e5" or CONTENTSID="epubid_a4435f9b23744dc598cd55570a9da6c7" or CONTENTSID="epubid_a650a061b79242169dadbfbe7d6d6dd6");
+	</select>
+
+	<!-- ユーザIDと日にちからそのユーザのhighlightpointを取得 -->
+	<select id="getMyDayHighLightPoint" resultType="int">
+		SELECT COUNT(distinct OPERATIONDATE)
+		FROM learninglog.ebook_bookroll
+		WHERE OPERATIONNAME like "%ADD MARKER%"
+		AND USERID=#{userid}
+		AND DATE_FORMAT(OPERATIONDATE, '%Y-%m-%d')=#{date}
+		AND (CONTENTSID="epubid_1b34896c926c422e9e78cd1d714488a8" or CONTENTSID="epubid_50ce8e91e51f4201aee68961d7727efa" or CONTENTSID="epubid_2bf2c73776c74ba7bcec6d64fb58a9e5" or CONTENTSID="epubid_a4435f9b23744dc598cd55570a9da6c7" or CONTENTSID="epubid_a650a061b79242169dadbfbe7d6d6dd6");
+	</select>
+
+	<!-- ユーザIDと日にちからそのユーザのmemopointを取得 -->
+	<select id="getMyDayMemoPoint" resultType="int">
+		SELECT COUNT(distinct OPERATIONDATE)
+		FROM learninglog.ebook_bookroll
+		WHERE OPERATIONNAME like "%ADD MEMO%"
+		AND USERID=#{userid}
+		AND DATE_FORMAT(OPERATIONDATE, '%Y-%m-%d')=#{date}
+		AND (CONTENTSID="epubid_1b34896c926c422e9e78cd1d714488a8" or CONTENTSID="epubid_50ce8e91e51f4201aee68961d7727efa" or CONTENTSID="epubid_2bf2c73776c74ba7bcec6d64fb58a9e5" or CONTENTSID="epubid_a4435f9b23744dc598cd55570a9da6c7" or CONTENTSID="epubid_a650a061b79242169dadbfbe7d6d6dd6");
+	</select>
+
+		<!-- ユーザIDと日にちからそのユーザのredsheetpointを取得 -->
+	<select id="getMyDayRedSheetPoint" resultType="int">
+		SELECT COUNT(distinct OPERATIONDATE)
+		FROM learninglog.ebook_bookroll
+		WHERE OPERATIONNAME like "%REDSHEET%"
+		AND USERID=#{userid}
+		AND DATE_FORMAT(OPERATIONDATE, '%Y-%m-%d')=#{date}
+		AND (CONTENTSID="epubid_1b34896c926c422e9e78cd1d714488a8" or CONTENTSID="epubid_50ce8e91e51f4201aee68961d7727efa" or CONTENTSID="epubid_2bf2c73776c74ba7bcec6d64fb58a9e5" or CONTENTSID="epubid_a4435f9b23744dc598cd55570a9da6c7" or CONTENTSID="epubid_a650a061b79242169dadbfbe7d6d6dd6");
+	</select>
+
+	<!-- ユーザIDから各教科書の最後のページに到達しているかを取得 -->
+	<select id="getMyEbookAchievement" resultType="int">
+		SELECT COUNT(*)
+		FROM learninglog.ebook_bookroll
+		where USERID=#{userid} and PAGE_NO = "9"
+		and OPERATIONNAME like "%NEXT%"
+		and CONTENTSID=#{ebookid};
+	</select>
+
+	<!-- 予備実験Log収集用プログラム -->
+	<!-- ユーザIDと日にちからそのユーザのebookpointを取得 -->
+	<select id="getEbookLog" resultType="int">
+		SELECT COUNT(distinct OPERATIONDATE)
+		FROM learninglog.ebook_bookroll
+		WHERE (OPERATIONNAME like "%NEXT%" OR OPERATIONNAME like "%PREV%")
+		AND USERID=#{userid}
+		AND DATE_FORMAT(OPERATIONDATE, '%Y-%m-%d')=#{date}
+		AND (CONTENTSID="epubid_40a60e9746664736b582ce87c88775ad" or CONTENTSID="epubid_f05ede8a5c194a488f3e488581dcd853" or CONTENTSID="epubid_392ffca072a24a94a9d7bc87f6176a76" or CONTENTSID="epubid_bdc385e941a2443b88503ebd31858099" or CONTENTSID="epubid_6089cbc900c842ddb8ac97a2d2074d4a");
+	</select>
+
+	<!-- ユーザIDと日にちからそのユーザのhighlightpointを取得 -->
+	<select id="getHighLightLog" resultType="int">
+		SELECT COUNT(distinct OPERATIONDATE)
+		FROM learninglog.ebook_bookroll
+		WHERE OPERATIONNAME like "%ADD MARKER%"
+		AND USERID=#{userid}
+		AND DATE_FORMAT(OPERATIONDATE, '%Y-%m-%d')=#{date}
+		AND (CONTENTSID="epubid_40a60e9746664736b582ce87c88775ad" or CONTENTSID="epubid_f05ede8a5c194a488f3e488581dcd853" or CONTENTSID="epubid_392ffca072a24a94a9d7bc87f6176a76" or CONTENTSID="epubid_bdc385e941a2443b88503ebd31858099" or CONTENTSID="epubid_6089cbc900c842ddb8ac97a2d2074d4a");
+	</select>
+
+	<!-- ユーザIDと日にちからそのユーザのmemopointを取得 -->
+	<select id="getMemoLog" resultType="int">
+		SELECT COUNT(distinct OPERATIONDATE)
+		FROM learninglog.ebook_bookroll
+		WHERE OPERATIONNAME like "%ADD MEMO%"
+		AND USERID=#{userid}
+		AND DATE_FORMAT(OPERATIONDATE, '%Y-%m-%d')=#{date}
+		AND (CONTENTSID="epubid_40a60e9746664736b582ce87c88775ad" or CONTENTSID="epubid_f05ede8a5c194a488f3e488581dcd853" or CONTENTSID="epubid_392ffca072a24a94a9d7bc87f6176a76" or CONTENTSID="epubid_bdc385e941a2443b88503ebd31858099" or CONTENTSID="epubid_6089cbc900c842ddb8ac97a2d2074d4a");
+	</select>
+
+	<!-- ユーザIDと日にちからそのユーザのredsheetpointを取得 -->
+	<select id="getRedSheetLog" resultType="int">
+		SELECT COUNT(distinct OPERATIONDATE)
+		FROM learninglog.ebook_bookroll
+		WHERE OPERATIONNAME like "%REDSHEET%"
+		AND USERID=#{userid}
+		AND DATE_FORMAT(OPERATIONDATE, '%Y-%m-%d')=#{date}
+		AND (CONTENTSID="epubid_40a60e9746664736b582ce87c88775ad" or CONTENTSID="epubid_f05ede8a5c194a488f3e488581dcd853" or CONTENTSID="epubid_392ffca072a24a94a9d7bc87f6176a76" or CONTENTSID="epubid_bdc385e941a2443b88503ebd31858099" or CONTENTSID="epubid_6089cbc900c842ddb8ac97a2d2074d4a");
+	</select>
+
+</mapper>
